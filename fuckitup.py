@@ -1,7 +1,5 @@
 import socket
-import string
 import sys
-from ctypes import memset
 from itertools import repeat
 
 def run_exploit():

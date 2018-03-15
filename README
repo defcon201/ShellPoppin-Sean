@@ -8,12 +8,9 @@ Making this stuff work:
     --> In gdb you can use bt to find the main address. Then you can do "find /g "stack pointer", +1000, "main address". Then you simply subtract the buffer address from this value.
  - finding the return address:
     --> I'm simply using the buffer address plus some wiggle room
- - run the exploit with "./exploiter <HOST> $(cat shell_code_64)"
+ - run the exploit with "python fuckitup.py <HOST> $(cat shell_code_64) <OFFSET> RETURN ADDRESS>"
  - after executing the exploit run "nc <HOST> <PORT>" to actually pop the shell
 
-Notes:
- - NOP sled is using 0x90. This is pretty suspicious. Something less conspicuous would be "mov reg, reg" or some other "effective nop" instruction.
-
 Dope-ass resources:
- - This code is largely based on the code/exploits illustrated in HACKING.  If you're looking to take a deeper dive then this book is a great starting point for learning how to construct exploits.
+ - This code is essentially a distilled/modernized (64-bitted) version of an exploit illustrated in Hacking: The Art of Exploitation, by Jon Erickson.  If you're looking to take a deeper dive then this book is a great starting point for learning how to construct exploits.
  - beej - This mahfk explains socket programming really well.
