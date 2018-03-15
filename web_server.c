@@ -57,7 +57,11 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    /* Ignore "broken pipe" errors */
+    /* 
+     *  Ignore "broken pipe" errors
+     *  These can occur if the client (e.g. the browser) closes the connection
+     *  with the server, but the server is not aware and attempts to send data.
+     */
     signal(SIGPIPE, SIG_IGN);
 
     printf("Accepting connection on port %d\n", PORT);
@@ -145,22 +149,21 @@ void process_connection(int socket_fd, struct sockaddr_in *client_addr)
 
 void get_request(int socket_fd, unsigned char *buffer)
 {
-    unsigned char *request_ptr = buffer;
     int cr = 0;
-    while(recv(socket_fd, request_ptr, 1, 0) == 1)
+    while(recv(socket_fd, buffer, 1, 0) == 1)
     {
-        if(*request_ptr == '\r')
+        if(*buffer == '\r')
         {
             cr = 1;
         }
-        else if((cr == 1) && (*request_ptr == '\n'))
+        else if((cr == 1) && (*buffer == '\n'))
         {
             /* go back to \r and terminate the string */
-            *(request_ptr - 1) = '\0';
+            *(buffer - 1) = '\0';
             break;
         }
 
-        request_ptr++;
+        buffer++;
     }
 }
 
